@@ -23,13 +23,15 @@ export const medicalAidNames = [
 ] as const;
 
 export const patientSchema = z.object({
-  fullName: z.string().min(1, "First name is required"),
-  phone: z.string(),
+  patientFullName: z.string().min(1, "First name is required"),
+  patientIdNumber: z.string(),
   paymentType: z.enum(["CASH", "MEDICAL_AID"]),
 
-  idNumber: z.string().optional(),
   homeAddress: z.string().optional(),
   medicalAidHolderFullName: z.string().optional(),
+  medicalAidHolderIdNumber: z.string().optional(),
+  medicalAidHolderPhone: z.string().optional(),
+  medicalAidHolderSecondPhone: z.string().optional(),
   medicalAidName: z.enum([...medicalAidNames]).optional(),
   medicalAidNumber: z.string().optional(),
   medicalAidPlan: z.string().optional(),

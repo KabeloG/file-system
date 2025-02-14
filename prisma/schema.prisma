@@ -49,24 +49,25 @@ model Appointments {
 }
 
 model Patient {
-  patientId   Int         @id @default(autoincrement())
-  fullName    String
-  phone       String
-  paymentType PaymentType @default(MEDICAL_AID)
+  patientId       Int         @id @default(autoincrement())
+  patientFullName String
+  patientIdNumber String
+  paymentType     PaymentType @default(MEDICAL_AID)
 
   // Medical Aid Details
-  medicalAidHolderFullName String?
-  medicalAidName           MedicalAidName?
-  medicalAidNumber         String?
-  idNumber                 String?
-  homeAddress              String?
-  medicalAidPlan           String?
+  medicalAidHolderFullName    String?
+  medicalAidName              MedicalAidName?
+  medicalAidNumber            String?
+  medicalAidHolderPhone       String?
+  medicalAidHolderSecondPhone String?
+  medicalAidHolderIdNumber    String?
+  homeAddress                 String?
+  medicalAidPlan              String?
 
   // Dependants
   dependants Dependant[] @relation("PatientDependants")
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Dependant {
@@ -80,5 +81,4 @@ model Dependant {
   medicalAidHolder   Patient @relation("PatientDependants", fields: [medicalAidHolderId], references: [patientId], onDelete: Cascade)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

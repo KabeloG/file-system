@@ -34,18 +34,21 @@ import { submitPatientForm } from "@/actions/submitPatientForm";
 
 export default function Page() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasDependants, setHasDependants] = useState(false);
 
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
     defaultValues: {
-      fullName: "",
-      phone: "",
+      patientFullName: "",
+      patientIdNumber: "",
       paymentType: "MEDICAL_AID",
-      idNumber: "",
       homeAddress: "",
       medicalAidName: "GEMS",
       medicalAidHolderFullName: "",
+      medicalAidHolderIdNumber: "",
+      medicalAidHolderPhone: "",
+      medicalAidHolderSecondPhone: "",
       medicalAidNumber: "",
       medicalAidPlan: "",
       dependants: [
@@ -71,7 +74,9 @@ export default function Page() {
     if (paymentType === "CASH") {
       form.setValue("medicalAidName", undefined);
       form.setValue("medicalAidHolderFullName", undefined);
-      form.setValue("idNumber", undefined);
+      form.setValue("medicalAidHolderIdNumber", undefined);
+      form.setValue("medicalAidHolderPhone", undefined);
+      form.setValue("medicalAidHolderSecondPhone", undefined);
       form.setValue("homeAddress", undefined);
       form.setValue("medicalAidNumber", undefined);
       form.setValue("medicalAidPlan", undefined);
@@ -80,11 +85,27 @@ export default function Page() {
   }, [paymentType, form]);
 
   async function onSubmit(data: PatientFormValues) {
-    if (!hasDependants) {
-      data.dependants = [];
-    }
+    try {
+      setIsSubmitting(true);
 
-    await submitPatientForm(data);
+      if (!hasDependants) {
+        data.dependants = [];
+      }
+
+      await submitPatientForm(data);
+
+      toast({
+        title: "Data sent",
+      });
+    } catch (error) {
+      setIsSubmitting(false);
+
+      toast({
+        title: "Error sending data",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -95,7 +116,7 @@ export default function Page() {
         {/* Patient Details */}
         <FormField
           control={control}
-          name="fullName"
+          name="patientFullName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Patient Full Name (Required)</FormLabel>
@@ -109,12 +130,12 @@ export default function Page() {
 
         <FormField
           control={control}
-          name="phone"
+          name="patientIdNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Patient Phone Number (Required)</FormLabel>
+              <FormLabel>Patient ID Number (Required)</FormLabel>
               <FormControl>
-                <Input placeholder="Enter phone number" {...field} />
+                <Input placeholder="Enter patient ID number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -158,7 +179,40 @@ export default function Page() {
 
             <FormField
               control={control}
-              name="idNumber"
+              name="medicalAidHolderPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Medical Aid Holder Phone Number (Required)
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter holder phone number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={control}
+              name="medicalAidHolderSecondPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Medical Aid Holder Alt. Phone Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter holder alternative phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={control}
+              name="medicalAidHolderIdNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Medical Aid Holder ID Number (Required)</FormLabel>
