@@ -84,17 +84,7 @@ export default function Page() {
       data.dependants = [];
     }
 
-    const response = await submitPatientForm(data);
-
-    if (response) {
-      toast({
-        title: "Patient Added",
-      });
-    } else {
-      toast({
-        title: "Something went wrong",
-      });
-    }
+    await submitPatientForm(data);
   }
 
   return (
