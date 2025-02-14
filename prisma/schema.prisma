@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum PaymentType {
+  CASH
+  MEDICAL_AID
+}
+
+enum MedicalAidName {
+  DISCOVERY
+  BONITAS
+  MOMENTUM
+  MEDIHELP
+  GEMS
+  BESTMED
+  PROFMED
+  SISONKE
+  CAPE_MEDICAL_PLAN
+  HOSMED
+  KEYHEALTH
+  LA_HEALTH
+  MEDSHIELD
+  SPECTRAMED
+  THEBEMED
+  FEDHEALTH
+  GENESIS
+  NATIONAL_HEALTHCARE_GROUP
+  OTHER
+}
+
+model Appointments {
+  id        String   @id @default(uuid())
+  fName     String
+  lName     String
+  phone     String
+  dateTime  String
+  createdAt DateTime @default(now())
+}
+
+model Patient {
+  patientId   Int         @id @default(autoincrement())
+  fullName    String
+  phone       String
+  paymentType PaymentType @default(MEDICAL_AID)
+
+  // Medical Aid Details
+  medicalAidHolderFullName String?
+  medicalAidName           MedicalAidName?
+  medicalAidNumber         String?
+  idNumber                 String?
+  homeAddress              String?
+  medicalAidPlan           String?
+
+  // Dependants
+  dependants Dependant[] @relation("PatientDependants")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Dependant {
+  dependantId          Int     @id @default(autoincrement())
+  dependantFullName    String?
+  dependantGender      Gender?
+  dependantDateOfBirth String?
+
+  // Relation to Patient
+  medicalAidHolderId Int
+  medicalAidHolder   Patient @relation("PatientDependants", fields: [medicalAidHolderId], references: [patientId], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
