@@ -393,7 +393,9 @@ export default function Page() {
           </>
         )}
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
       </form>
     </Form>
   );
