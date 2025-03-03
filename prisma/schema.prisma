@@ -23,6 +23,7 @@ enum MedicalAidName {
   BONITAS
   MOMENTUM
   MEDIHELP
+  POLMED
   GEMS
   BESTMED
   PROFMED

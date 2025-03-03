@@ -5,6 +5,7 @@ export const medicalAidNames = [
   "BONITAS",
   "MOMENTUM",
   "MEDIHELP",
+  "POLMED",
   "GEMS",
   "BESTMED",
   "PROFMED",
