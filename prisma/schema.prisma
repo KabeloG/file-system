@@ -40,17 +40,8 @@ enum MedicalAidName {
   OTHER
 }
 
-model Appointments {
-  id        String   @id @default(uuid())
-  fName     String
-  lName     String
-  phone     String
-  dateTime  String
-  createdAt DateTime @default(now())
-}
-
 model Patient {
-  patientId       Int         @id @default(autoincrement())
+  patientId       String      @id @default(uuid())
   patientFullName String
   patientIdNumber String
   paymentType     PaymentType @default(MEDICAL_AID)
@@ -78,7 +69,7 @@ model Dependant {
   dependantDateOfBirth String?
 
   // Relation to Patient
-  medicalAidHolderId Int
+  medicalAidHolderId String
   medicalAidHolder   Patient @relation("PatientDependants", fields: [medicalAidHolderId], references: [patientId], onDelete: Cascade)
 
   createdAt DateTime @default(now())
